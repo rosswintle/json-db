@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Editor</title>
+</head>
+<body>
+    <main x-data="jsonData">
+        <h1>JSON DB editor</h1>
+        <p>This tool lets you edit a JSON file containing an array of objects with the same properties.</p>
+        <p>Saving WILL OVERWRITE the local file. So be careful. Edit a copy if needed. I accept no responsibility for loss of data.</p>
+        <button @click="loadFile">Open file</button>
+        <button @click="saveFile">Save</button>
+        <table>
+            <thead>
+                <tr>
+                    <template x-for="(column, columnIndex) in data[0]">
+                        <th x-text="columnIndex"></th>
+                    </template>
+                </tr>
+            </thead>
+            <tbody>
+
+                <template x-for="(item, itemIndex) in data" :key="itemIndex">
+                    <tr>
+                        <template x-for="(column, columnIndex) in item" :key="columnIndex">
+                            <td>
+                                <input type="text" x-model="data[itemIndex][columnIndex]">
+                            </td>
+                        </template>
+                    </tr>
+                </template>
+
+            </tbody>
+        </table>
+    </main>
+
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('jsonData', () => ({
+                open: false,
+
+                fileHandle: null,
+
+                data: [],
+
+                async loadFile() {
+                    const pickerOptions = {
+                        types: [
+                            {
+                                description: 'JSON',
+                                accept: {
+                                    'application/json': ['.json']
+                                }
+                            }
+                        ],
+                    };
+
+                    // open file picker
+                    [this.fileHandle] = await window.showOpenFilePicker( pickerOptions );
+
+                    if (this.fileHandle.kind === 'file') {
+                        const file = await this.fileHandle.getFile();
+                        const fileContent = await file.text();
+                        this.data = JSON.parse(fileContent);
+                    }
+                },
+
+                async saveFile() {
+                    const writable = await this.fileHandle.createWritable();
+                    await writable.write(JSON.stringify(this.data, null, 2));
+                    await writable.close();
+                }
+            }));
+        });
+    </script>
+
+    <script src="//unpkg.com/alpinejs" defer></script>
+
+</body>
+</html>
