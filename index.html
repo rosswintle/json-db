@@ -13,14 +13,16 @@
         <p class="mb-2">This tool lets you edit a JSON file containing an array of objects with the same properties.</p>
         <p class="mb-2">Saving WILL OVERWRITE the local file. So be careful. Edit a copy if needed. I accept no responsibility for loss of data.</p>
         <p class="mb-2">Does NOT work on Firefox. Does NOT handle nested data in any way.</p>
-        <button class="border-2 rounded px-4 py-2 mr-2" @click="loadFile">Open file</button>
-        <button class="border-2 rounded px-4 py-2 mr-2" @click="saveFile">Save</button>
+        <div id="buttons" class="mb-4">
+            <button class="border-2 rounded px-4 py-2 mr-2" @click="loadFile">Open file</button>
+            <button class="border-2 rounded px-4 py-2 mr-2" @click="saveFile">Save</button>
+        </div>
 
-        <table>
+        <table class="border border-gray-300">
             <thead>
                 <tr>
                     <template x-for="(column, columnIndex) in data[0]" :key="columnIndex">
-                        <th x-text="columnIndex"></th>
+                        <th class="bg-gray-200 border-r border-r-gray-300 last-of-type:border-r-0" x-text="columnIndex"></th>
                     </template>
                 </tr>
             </thead>
@@ -29,7 +31,7 @@
                 <template x-for="(item, itemIndex) in data" :key="itemIndex">
                     <tr>
                         <template x-for="(column, columnIndex) in item" :key="columnIndex">
-                            <td>
+                            <td class="border border-gray-300">
                                 <template x-if="Array.isArray(column)">
                                     <select multiple x-model="data[itemIndex][columnIndex]">
                                         <option></option>
