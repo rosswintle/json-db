@@ -14,10 +14,11 @@
         <p>Does NOT work on Firefox. Does NOT handle nested data in any way.</p>
         <button @click="loadFile">Open file</button>
         <button @click="saveFile">Save</button>
+
         <table>
             <thead>
                 <tr>
-                    <template x-for="(column, columnIndex) in data[0]">
+                    <template x-for="(column, columnIndex) in data[0]" :key="columnIndex">
                         <th x-text="columnIndex"></th>
                     </template>
                 </tr>
@@ -28,7 +29,18 @@
                     <tr>
                         <template x-for="(column, columnIndex) in item" :key="columnIndex">
                             <td>
-                                <input type="text" x-model="data[itemIndex][columnIndex]">
+                                <template x-if="Array.isArray(column)">
+                                    <select multiple x-model="data[itemIndex][columnIndex]">
+                                        <option></option>
+                                        <template x-for="item in arrays[columnIndex]">
+                                            <option value="" :value="item" x-text="item" :selected="column.includes(item)"></option>
+                                        </template>
+                                    </select>
+                                </template>
+
+                                <template x-if="typeof(column) === 'string'">
+                                    <input type="text" x-model="data[itemIndex][columnIndex]">
+                                </template>
                             </td>
                         </template>
                     </tr>
@@ -46,6 +58,9 @@
                 fileHandle: null,
 
                 data: [],
+
+                // This is an object with arrays of values that are used in sub-arrays
+                arrays: {},
 
                 async loadFile() {
                     const pickerOptions = {
@@ -66,7 +81,32 @@
                         const file = await this.fileHandle.getFile();
                         const fileContent = await file.text();
                         this.data = JSON.parse(fileContent);
+                        this.loadArrays();
+                        console.log(this.data);
+                        console.log(this.things);
                     }
+                },
+
+                loadArrays() {
+                    const columns = Object.keys( this.data[0] );
+                    const arrays = {};
+
+                    this.data.forEach( item => {
+                        columns.forEach( column => {
+                            if (Array.isArray(item[column])) {
+                                if (!arrays[column]) {
+                                    arrays[column] = [];
+                                }
+                                item[column].forEach( value => {
+                                    if (!arrays[column].includes(value)) {
+                                        arrays[column].push(value);
+                                    }
+                                });
+                            }
+                        });
+                    });
+
+                    this.arrays = arrays;
                 },
 
                 async saveFile() {
