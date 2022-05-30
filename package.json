@@ -1,0 +1,21 @@
+{
+  "name": "json-db-editor",
+  "version": "1.0.0",
+  "description": "An editor for JSON files containing lots of similar objects",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rosswintle/json-db.git"
+  },
+  "author": "Ross Wintle",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rosswintle/json-db/issues"
+  },
+  "homepage": "https://github.com/rosswintle/json-db#readme",
+  "devDependencies": {
+    "tailwindcss": "^3.0.24"
+  }
+}
