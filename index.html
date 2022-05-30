@@ -7,14 +7,14 @@
     <link href="/dist/styles.css" rel="stylesheet">
     <title>JSON Editor</title>
 </head>
-<body style="font-family: sans-serif;">
+<body class="px-8 py-6">
     <main x-data="jsonData">
-        <h1>JSON DB editor</h1>
-        <p>This tool lets you edit a JSON file containing an array of objects with the same properties.</p>
-        <p>Saving WILL OVERWRITE the local file. So be careful. Edit a copy if needed. I accept no responsibility for loss of data.</p>
-        <p>Does NOT work on Firefox. Does NOT handle nested data in any way.</p>
-        <button @click="loadFile">Open file</button>
-        <button @click="saveFile">Save</button>
+        <h1 class="text-3xl font-bold mb-4">JSON DB editor</h1>
+        <p class="mb-2">This tool lets you edit a JSON file containing an array of objects with the same properties.</p>
+        <p class="mb-2">Saving WILL OVERWRITE the local file. So be careful. Edit a copy if needed. I accept no responsibility for loss of data.</p>
+        <p class="mb-2">Does NOT work on Firefox. Does NOT handle nested data in any way.</p>
+        <button class="border-2 rounded px-4 py-2 mr-2" @click="loadFile">Open file</button>
+        <button class="border-2 rounded px-4 py-2 mr-2" @click="saveFile">Save</button>
 
         <table>
             <thead>
